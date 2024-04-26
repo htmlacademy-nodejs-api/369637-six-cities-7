@@ -1,5 +1,6 @@
 import { CommandInterface } from './command.interface.js';
 import { TSVFileReader } from '../../shared/libs/tsv-file-reader.js';
+import chalk from 'chalk';
 
 export class ImportCommand implements CommandInterface {
   public getName(): string {
@@ -14,7 +15,7 @@ export class ImportCommand implements CommandInterface {
       fileReader.read();
       console.info(fileReader.toArray());
     } catch (error: unknown) {
-      console.error('Failed to read data');
+      console.error(chalk.red('Failed to read data'));
       if (error instanceof Error) {
         console.error(error.message);
       }

@@ -1,5 +1,6 @@
 import { readFileSync } from 'node:fs';
 import { resolve } from 'node:path';
+import chalk from 'chalk';
 
 import { CommandInterface } from './command.interface.js';
 
@@ -34,9 +35,9 @@ export class VersionCommand implements CommandInterface {
   public async execute(..._params: string[]): Promise<void> {
     try {
       const version = this.readVersion();
-      console.info(version);
+      console.info(chalk.blue(version));
     } catch (error: unknown) {
-      console.error('Failed to read version');
+      console.error(chalk.red('Failed to read version'));
       if (error instanceof Error) {
         console.error(error.message);
       }
