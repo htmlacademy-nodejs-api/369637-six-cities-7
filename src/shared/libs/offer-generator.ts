@@ -9,17 +9,16 @@ import {
 import type { OfferGeneretorInterface } from './offer-generetor.interface.js';
 import type { MockServerData } from '../types/mock-server-data.type.js';
 
-const MIN_PRICE = 100;
-const MAX_PRICE = 100000;
-
-const FIRST_WEEK_DAY = 1;
-const LAST_WEEK_DAY = 7;
-
-const MIN_VALUE = 1;
-const MAX_ROOMS = 8;
-const MAX_GUESTS = 10;
-const MAX_RATING = 5;
-const ROUND_LIMIT = 2;
+enum Limit {
+  MIN_PRICE = 100,
+  MAX_PRICE = 100000,
+  LAST_WEEK_DAY = 7,
+  START = 1,
+  MAX_ROOMS = 8,
+  MAX_GUESTS = 10,
+  MAX_RATING = 5,
+  ROUND_LIMIT = 2,
+}
 
 const BOLEANS = ['true', 'false'];
 
@@ -29,18 +28,22 @@ export class OfferGenerator implements OfferGeneretorInterface {
     const name = getRandomItem(this.mockData.names);
     const description = getRandomItems(this.mockData.descriptions);
     const createdDate = dayjs()
-      .subtract(generateRandomValue(FIRST_WEEK_DAY, LAST_WEEK_DAY), 'day')
+      .subtract(generateRandomValue(Limit.START, Limit.LAST_WEEK_DAY), 'day')
       .toISOString();
     const city = getRandomItem(this.mockData.cities);
     const preview = getRandomItem(this.mockData.previews);
-    const photos = getRandomItems(this.mockData.photos, 6);
+    const photos = getRandomItems(this.mockData.photos, Limit.MAX_RATING);
     const isPremium = getRandomItem(BOLEANS);
     const isFavorite = getRandomItem(BOLEANS);
-    const rating = generateRandomValue(MIN_VALUE, MAX_RATING, ROUND_LIMIT);
+    const rating = generateRandomValue(
+      Limit.START,
+      Limit.MAX_RATING,
+      Limit.ROUND_LIMIT
+    );
     const type = getRandomItem(this.mockData.types);
-    const roomsCount = generateRandomValue(MIN_VALUE, MAX_ROOMS);
-    const guestsCount = generateRandomValue(MIN_VALUE, MAX_GUESTS);
-    const price = generateRandomValue(MIN_PRICE, MAX_PRICE);
+    const roomsCount = generateRandomValue(Limit.START, Limit.MAX_ROOMS);
+    const guestsCount = generateRandomValue(Limit.START, Limit.MAX_GUESTS);
+    const price = generateRandomValue(Limit.MIN_PRICE, Limit.MAX_PRICE);
     const facilities = getRandomItems(this.mockData.facilities);
     const author = getRandomItem(this.mockData.authors);
     const latitude = getRandomItem(this.mockData.latitudes);
