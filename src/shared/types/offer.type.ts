@@ -79,7 +79,7 @@ export type Offer = {
   /**
    * Автор предложения
    */
-  author: User;
+  userId: User;
   /**
    * Количество комментариев
    */
@@ -87,6 +87,6 @@ export type Offer = {
   /**
    * Координаты предложения для аренды
    */
-  latitude: number;
-  longitude: number;
+  latitude: string;
+  longitude: string;
 };

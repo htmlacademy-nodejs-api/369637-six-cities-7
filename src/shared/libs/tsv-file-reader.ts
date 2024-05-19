@@ -45,7 +45,7 @@ export class TSVFileReader extends EventEmitter implements FileReaderInterface {
       guestsCount,
       price,
       facilitiesList,
-      author,
+      userId,
       comments,
       latitude,
       longitude,
@@ -66,10 +66,10 @@ export class TSVFileReader extends EventEmitter implements FileReaderInterface {
       guestsCount: Number(guestsCount),
       price: this.parsePrice(price),
       facilities: facilitiesList.split(';') as Facilitie[],
-      author: author as unknown as User,
+      userId: userId as unknown as User,
       comments: Number(comments),
-      latitude: Number(latitude),
-      longitude: Number(longitude),
+      latitude: latitude,
+      longitude: longitude,
     };
   }
 
@@ -92,7 +92,9 @@ export class TSVFileReader extends EventEmitter implements FileReaderInterface {
         rowCount++;
 
         const parsedOffer = this.parseLineToOffer(completeRow);
-        this.emit('line', parsedOffer);
+        await new Promise((resolve) => {
+          this.emit('line', parsedOffer, resolve);
+        });
       }
     }
 

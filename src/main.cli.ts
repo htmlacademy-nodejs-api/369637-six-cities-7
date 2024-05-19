@@ -7,6 +7,8 @@ import {
   GenerateCommand,
 } from './cli/index.js';
 
+import 'reflect-metadata';
+
 function bootstrap() {
   const cliApp = new CLIApp();
 

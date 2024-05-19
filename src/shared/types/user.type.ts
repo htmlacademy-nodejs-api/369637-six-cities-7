@@ -1,10 +1,14 @@
-type UserType = 'обычный' | 'pro';
+export type UserType = 'обычный' | 'pro';
 
 export type User = {
   /**
    * Имя
    */
-  name: string;
+  firstName: string;
+  /**
+   * Фамилия
+   */
+  lastName: string;
   /**
    * Электронная почта
    */
@@ -13,10 +17,7 @@ export type User = {
    * Аватар пользователя
    */
   avatar?: string;
-  /**
-   * Пароль
-   */
-  password: string;
+
   /**
    * Тип пользователя
    */
