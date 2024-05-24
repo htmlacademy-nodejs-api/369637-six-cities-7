@@ -1,0 +1,630 @@
+openapi: 3.1.0
+info:
+  title: API cервер для проекта 6 городов
+  description: Cписок ресурсов и маршрутов сервера 6 городов
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  version: 2.0.0
+tags:
+  - name: users
+    description: Действия с пользователем.
+  - name: offers
+    description: Действия с объявлениями.
+  - name: comments
+    description: Действия с комментариями.
+paths:
+  /users/register:
+    post:
+      tags:
+        - users
+      summary: Создание нового пользователя
+      description: Регистрирует нового пользователя.
+
+      requestBody:
+          description: Информация для создания нового пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/createUser'
+          required: true
+
+      responses:
+        "201":
+          description: Пользователь зарегистрирован. Объект пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/user'
+
+        "400":
+          description: Ресурс не найден
+
+        "409":
+          description: Пользователь с таким email уже существует.
+
+        "500":
+          description: Сервер недоступен
+
+  /users/login:
+    post:
+      tags:
+        - users
+      summary: Вход в закрытую часть приложения
+      description: Авторизует пользователя на основе логина и пароля
+
+      requestBody:
+          description: Информация авторизации пользователя.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/loginUser'
+          required: true
+
+      responses:
+        '200':
+          description: Успешная авторизация
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+
+        "400":
+          description: Ресурс не найден
+
+        "401":
+          description: Неверный логин или пароль.
+
+        "500":
+          description: Сервер недоступен
+
+    get:
+      tags:
+        - users
+      summary: Проверка состояния пользователя
+      description: Возвращает информацию по авторизованному пользователю
+
+      requestBody:
+          description: Cессионный токен.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/token'
+          required: true
+
+      responses:
+      '200':
+        description: Информация о пользователе
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/user'
+
+      "403":
+        description: Пользователь не авторизован.
+
+      "500":
+          description: Сервер недоступен
+
+  /users/logout:
+    post:
+      tags:
+        - users
+      summary: Выход из закрытой части приложения
+      description: Завершает пользовательский сеанс (сессию).
+
+    requestBody:
+        description: Информация авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/token'
+        required: true
+
+    responses:
+      '200':
+        description: Успешный выход
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Успешный выход из приложения"
+
+      "400":
+          description: Ресурс не найден
+
+      "409":
+        description: Токен не распознан
+
+      "500":
+          description: Сервер недоступен
+
+
+  /users/{userId}/favorites:
+    get:
+      tags:
+        - users
+      summary: Список избранных предложений
+      description: Получение предложений, добавленных в избранное.
+
+      requestBody:
+        description: Информация авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/token'
+        required: true
+
+      responses:
+      '200':
+        description: Все предложения, добавленные в избранное.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offers'
+
+      "403":
+        description: Пользователь не авторизован
+
+      "400":
+        description: Ресурс не найден
+
+      "500":
+          description: Сервер недоступен
+
+  /users/{userId}/favorites/{offerId}:
+    post:
+      tags:
+        - users
+      summary: Добавление и удаление предложения в/из избранного
+      description: Добавление и удаление любого предложения в/из списка избранных предложений.
+
+      requestBody:
+        description: Информация авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/token'
+        required: true
+
+      responses:
+      '200':
+        description: Предложение добавлено в избранное.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Предложение добавлено в избранное"
+
+      "400":
+        description: Ресурс не найден
+
+      "403":
+        description: Пользователь не авторизован
+
+      "500":
+          description: Сервер недоступен
+
+  /offers:
+    get:
+      tags:
+       - offers
+      summary: Список предложений по аренде
+      description: Возвращает отсортированный список предложений по дате публикации (по убыванию)
+
+      responses:
+      '200':
+        description: Список предложений по аренде
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offers'
+
+
+      "400":
+        description: Ресурс не найден
+
+      "500":
+          description: Сервер недоступен
+
+    post:
+      tags:
+       - offers
+      summary: Создание нового предложения
+      description: Создает новое предложение по аренде
+
+      requestBody:
+        description:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+        required: true
+
+      responses:
+      '200':
+        description: Успешное создание предложения
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/createOffer'
+
+      "400":
+        description: Ресурс не найден
+
+      "403":
+        description: Пользователь не авторизован
+
+      "409":
+        description: Не все поля заполнены
+
+      "500":
+        description: Сервер недоступен
+
+  /offers/{offerId}:
+    get:
+      tags:
+       - offers
+      summary: Детальная информация по предложению
+      description: Получение детальной информации по одному предложению.
+
+    responses:
+      '200':
+        description: Детальная информация по предложению
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/fullOffer'
+
+      "400":
+        description: Ресурс не найден
+
+      "500":
+        description: Сервер недоступен
+
+    put:
+      tags:
+       - offers
+      summary: Редактирование предложения
+      description: Редактирование предложения по аренде
+
+      requestBody:
+        description: Редактирование предложения
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/fullOffer'
+        required: true
+
+      responses:
+        '200':
+          description: Предложение успешно изменено
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/fullOffer'
+
+        "400":
+          description: Ресурс не найден
+
+        "403":
+          description: Пользователь не авторизован
+
+        "500":
+          description: Сервер недоступен
+
+    delete:
+      tags:
+       - offers
+      summary: Удаление предложения
+      description: Удаление предложения по аренде
+
+      responses:
+        '200':
+          description: Предложение успешно удалено
+
+        "400":
+          description: Ресурс не найден
+
+        "403":
+          description: Пользователь не авторизован
+
+        "500":
+          description: Сервер недоступен
+
+
+  /offers/premium/{city}:
+    get:
+      tags:
+       - offers
+      summary: Премиальные предложения для города
+      description: Удаление предложения по аренде
+
+      responses:
+        '200':
+          description: Cпискок премиальных предложений для определённого города.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/offers'
+
+        "400":
+          description: Ресурс не найден
+
+        "500":
+          description: Сервер недоступен
+
+  /comments:
+    get:
+      tags:
+       - comments
+      summary: Список комментариев
+      description: Получение списка комментариев для определённого предложения.
+
+      responses:
+        '200':
+          description: Cпискок премиальных предложений для определённого города.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/comments'
+
+        "400":
+          description: Ресурс не найден
+
+        "500":
+          description: Сервер недоступен
+
+    post:
+      tags:
+       - comments
+      summary: Добавление комментария
+      description: Добавление нового комментария к предложению
+
+      requestBody:
+        description:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/comment'
+        required: true
+
+      responses:
+      '200':
+        description: Успешное создание комментария
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/comment'
+
+      "400":
+        description: Ресурс не найден
+
+      "403":
+        description: Пользователь не авторизован
+
+      "500":
+        description: Сервер недоступен
+
+
+
+components:
+  schemas:
+    comment:
+      type: object
+      properties:
+        text:
+          type: string
+        date:
+          type: string
+        rating:
+          type: number
+          example: 5
+    comments:
+      type: array
+      items:
+        type: object
+        properties:
+          text:
+            type: string
+          date:
+            type: string
+          rating:
+            type: number
+            example: 5
+    fullOffer:
+      type: object
+      properties:
+        comments:
+         type: number
+         example: 10
+        description:
+          type: string
+        photos:
+          type: array
+        price:
+          type: number
+          example: 1234
+        isFavorite:
+          type: boolean
+          example: true
+        isPremium:
+          type: boolean
+          example: true
+        name:
+          type: string
+        type:
+          type: string
+          example: apartment
+        date:
+          type: string
+        city:
+          type: string
+          example: Amsterdam
+        preview:
+          type: string
+        rating:
+          type: number
+          example: 5
+        roomsCount:
+          type: number
+          example: 10
+        guestsCount:
+          type: number
+          example: 10
+        facilities:
+          type: array
+        userId:
+          type: string
+        latitude:
+          type: string
+          example: 50.938361
+        longitude:
+          type: string
+          example: 6.959974
+    createOffer:
+      type: object
+      properties:
+        description:
+          type: string
+        photos:
+          type: array
+        price:
+          type: number
+          example: 1234
+        isFavorite:
+          type: boolean
+          example: true
+        isPremium:
+          type: boolean
+          example: true
+        name:
+          type: string
+        type:
+          type: string
+          example: apartment
+        date:
+          type: string
+        city:
+          type: string
+          example: Amsterdam
+        preview:
+          type: string
+        rating:
+          type: number
+          example: 5
+        roomsCount:
+          type: number
+          example: 10
+        guestsCount:
+          type: number
+          example: 10
+        facilities:
+          type: array
+        userId:
+          type: string
+        latitude:
+          type: string
+          example: 50.938361
+        longitude:
+          type: string
+          example: 6.959974
+    offers:
+      type: array
+      items:
+        type: object
+        properties:
+          price:
+            type: number
+            example: 1234
+          isFavorite:
+            type: boolean
+            example: true
+          isPremium:
+            type: boolean
+            example: true
+          name:
+            type: string
+          type:
+            type: string
+            example: apartment
+          date:
+            type: string
+          city:
+            type: string
+            example: Amsterdam
+          preview:
+            type: string
+          rating:
+            type: number
+            example: 5
+          comments:
+            type: number
+            example: 10
+    token:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Пользователь успешно авторизован"
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    loginUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
+        password:
+          type: string
+          example: 123456
+
+    createUser:
+      type: object
+
+      properties:
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
+        firstname:
+          type: string
+          example: Keks
+
+        lastname:
+          type: string
+          example: Cat
+
+        password:
+          type: string
+          example: 123456
+
+        type:
+          type: string
+          example: pro
+
+    user:
+      type: object
+
+      properties:
+        id:
+          type: string
+          example: 6329c3d6a04ab1061c6425ea
+
+        email:
+          type: string
+          example: keks@htmlacademy.ru
+
+        type:
+          type: string
+          example: pro
