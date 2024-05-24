@@ -6,8 +6,10 @@ import type { DatabaseClientInterface } from './index.js';
 import { Component } from '../../types/index.js';
 import type { Logger } from '../logger/index.js';
 
-const RETRY_COUNT = 5;
-const RETRY_TIMEOUT = 1000;
+enum Retry {
+  COUNT = 5,
+  TIMEOUT = 1000,
+}
 
 @injectable()
 export class MongoDatabaseClient implements DatabaseClientInterface {
@@ -25,7 +27,7 @@ export class MongoDatabaseClient implements DatabaseClientInterface {
 
     this.logger.info('Connecting to MongoDB…');
     let attempt = 0;
-    while (attempt < RETRY_COUNT) {
+    while (attempt < Retry.COUNT) {
       try {
         this.mongoose = await Mongoose.connect(uri);
         this.isConnected = true;
@@ -37,11 +39,11 @@ export class MongoDatabaseClient implements DatabaseClientInterface {
           `Failed to connect to the database. Attempt ${attempt}`,
           error as Error
         );
-        await setTimeout(RETRY_TIMEOUT);
+        await setTimeout(Retry.TIMEOUT);
       }
     }
     throw new Error(
-      `Unable to connect to the  database after ${RETRY_COUNT} attempts`
+      `Unable to connect to the  database after ${Retry.COUNT} attempts`
     );
   }
 
