@@ -50,6 +50,19 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public rating: number;
 
   @prop()
+  public ratings: number[];
+
+  public getRating() {
+    return this.rating;
+  }
+
+  public setRating() {
+    return (
+      this.ratings.reduce((acc, cur) => acc + cur, 0) / this.ratings.length
+    );
+  }
+
+  @prop()
   public type: OfferType;
 
   @prop()
@@ -74,10 +87,10 @@ export class OfferEntity extends defaultClasses.TimeStamps {
   public comments?: number;
 
   @prop()
-  public latitude: number;
+  public latitude: string;
 
   @prop()
-  public longitude: number;
+  public longitude: string;
 }
 
 export const OfferModel = getModelForClass(OfferEntity);
