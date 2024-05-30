@@ -11,6 +11,7 @@ export class CreateOfferDto {
   public isPremium: boolean;
   public isFavorite: boolean;
   public rating: number;
+  public ratings: number[];
   public type: OfferType;
   public roomsCount: number;
   public guestsCount: number;
