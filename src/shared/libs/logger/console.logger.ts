@@ -1,6 +1,6 @@
-import { Logger } from './logger.interface.js';
+import { LoggerInterface } from './logger.interface.js';
 
-export class ConsoleLogger implements Logger {
+export class ConsoleLogger implements LoggerInterface {
   public debug(message: string, ...args: unknown[]): void {
     console.debug(message, ...args);
   }

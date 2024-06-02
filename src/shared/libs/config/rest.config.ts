@@ -4,14 +4,16 @@ import { inject, injectable } from 'inversify';
 import { configRestSchema, RestSchema } from './index.js';
 
 import type { Config } from './config.interface.js';
-import type { Logger } from '../logger/index.js';
+import type { LoggerInterface } from '../logger/index.js';
 import { Component } from '../../types/index.js';
 
 @injectable()
 export class RestConfig implements Config<RestSchema> {
   private readonly config: RestSchema;
 
-  constructor(@inject(Component.Logger) private readonly logger: Logger) {
+  constructor(
+    @inject(Component.Logger) private readonly logger: LoggerInterface
+  ) {
     const parsedOutput = config();
 
     if (parsedOutput.error) {

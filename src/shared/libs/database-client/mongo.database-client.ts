@@ -4,7 +4,7 @@ import { setTimeout } from 'node:timers/promises';
 
 import type { DatabaseClientInterface } from './index.js';
 import { Component } from '../../types/index.js';
-import type { Logger } from '../logger/index.js';
+import type { LoggerInterface } from '../logger/index.js';
 
 enum Retry {
   COUNT = 5,
@@ -16,7 +16,9 @@ export class MongoDatabaseClient implements DatabaseClientInterface {
   private mongoose: typeof Mongoose;
   private isConnected: boolean;
 
-  constructor(@inject(Component.Logger) private readonly logger: Logger) {
+  constructor(
+    @inject(Component.Logger) private readonly logger: LoggerInterface
+  ) {
     this.isConnected = false;
   }
 

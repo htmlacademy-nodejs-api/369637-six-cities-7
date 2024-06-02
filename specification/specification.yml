@@ -143,74 +143,6 @@ paths:
           description: Сервер недоступен
 
 
-  /users/{userId}/favorites:
-    get:
-      tags:
-        - users
-      summary: Список избранных предложений
-      description: Получение предложений, добавленных в избранное.
-
-      requestBody:
-        description: Информация авторизации пользователя.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/token'
-        required: true
-
-      responses:
-      '200':
-        description: Все предложения, добавленные в избранное.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/offers'
-
-      "403":
-        description: Пользователь не авторизован
-
-      "400":
-        description: Ресурс не найден
-
-      "500":
-          description: Сервер недоступен
-
-  /users/{userId}/favorites/{offerId}:
-    post:
-      tags:
-        - users
-      summary: Добавление и удаление предложения в/из избранного
-      description: Добавление и удаление любого предложения в/из списка избранных предложений.
-
-      requestBody:
-        description: Информация авторизации пользователя.
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/token'
-        required: true
-
-      responses:
-      '200':
-        description: Предложение добавлено в избранное.
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                message:
-                  type: string
-                  example: "Предложение добавлено в избранное"
-
-      "400":
-        description: Ресурс не найден
-
-      "403":
-        description: Пользователь не авторизован
-
-      "500":
-          description: Сервер недоступен
-
   /offers:
     get:
       tags:
@@ -360,7 +292,75 @@ paths:
         "500":
           description: Сервер недоступен
 
-  /comments:
+  /offers/{userId}/favorites:
+    get:
+      tags:
+        - users
+      summary: Список избранных предложений
+      description: Получение предложений, добавленных в избранное.
+
+      requestBody:
+        description: Информация авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/token'
+        required: true
+
+      responses:
+      '200':
+        description: Все предложения, добавленные в избранное.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/offers'
+
+      "403":
+        description: Пользователь не авторизован
+
+      "400":
+        description: Ресурс не найден
+
+      "500":
+          description: Сервер недоступен
+
+  /offers/{userId}/favorites/{offerId}:
+    post:
+      tags:
+        - users
+      summary: Добавление и удаление предложения в/из избранного
+      description: Добавление и удаление любого предложения в/из списка избранных предложений.
+
+      requestBody:
+        description: Информация авторизации пользователя.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/token'
+        required: true
+
+      responses:
+      '200':
+        description: Предложение добавлено в избранное.
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Предложение добавлено в избранное"
+
+      "400":
+        description: Ресурс не найден
+
+      "403":
+        description: Пользователь не авторизован
+
+      "500":
+          description: Сервер недоступен
+
+  /comments/:offerId:
     get:
       tags:
        - comments
