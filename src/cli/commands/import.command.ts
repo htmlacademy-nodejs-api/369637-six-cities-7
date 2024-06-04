@@ -6,7 +6,7 @@ import type { Offer } from '../../shared/types/index.js';
 import type { UserServiceInterface } from '../../shared/modules/user/user-service.interface.js';
 import type { OfferServiceInterface } from '../../shared/modules/offer/offer-service.interface.js';
 import type { DatabaseClientInterface } from '../../shared/libs/database-client/database-client.interface.js';
-import type { Logger } from '../../shared/libs/logger/logger.interface.js';
+import type { LoggerInterface } from '../../shared/libs/logger/logger.interface.js';
 import { DefaultUserService } from '../../shared/modules/user/default-user.service.js';
 import { DefaultOfferService } from '../../shared/modules/offer/default-offer.service.js';
 import { MongoDatabaseClient } from '../../shared/libs/database-client/mongo.database-client.js';
@@ -21,7 +21,7 @@ export class ImportCommand implements CommandInterface {
   private userService: UserServiceInterface;
   private offerService: OfferServiceInterface;
   private databaseClient: DatabaseClientInterface;
-  private logger: Logger;
+  private logger: LoggerInterface;
   private salt: string;
 
   constructor() {
@@ -71,6 +71,7 @@ export class ImportCommand implements CommandInterface {
       isPremium: offer.isPremium,
       isFavorite: offer.isFavorite,
       rating: offer.rating,
+      ratings: [],
       type: offer.type,
       roomsCount: offer.roomsCount,
       guestsCount: offer.guestsCount,

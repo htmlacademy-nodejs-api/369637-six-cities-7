@@ -5,12 +5,12 @@ import { UserServiceInterface } from './user-service.interface.js';
 import { UserEntity } from './user.entity.js';
 import { CreateUserDto } from '../dto/create-user.dto.js';
 import { Component } from '../../types/index.js';
-import type { Logger } from '../../libs/logger/logger.interface.js';
+import type { LoggerInterface } from '../../libs/logger/logger.interface.js';
 
 @injectable()
 export class DefaultUserService implements UserServiceInterface {
   constructor(
-    @inject(Component.Logger) private readonly logger: Logger,
+    @inject(Component.Logger) private readonly logger: LoggerInterface,
     @inject(Component.UserModel)
     private readonly userModel: types.ModelType<UserEntity>
   ) {}

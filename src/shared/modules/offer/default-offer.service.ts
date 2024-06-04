@@ -4,13 +4,10 @@ import { DocumentType, types } from '@typegoose/typegoose';
 import { Component } from '../../types/index.js';
 import type { OfferServiceInterface } from './offer-service.interface.js';
 import { OfferEntity } from './offer.entity.js';
-import type { Logger } from '../../libs/logger/logger.interface.js';
+import type { LoggerInterface } from '../../libs/logger/logger.interface.js';
 import { SortType } from '../../types/index.js';
 import { CreateOfferDto } from '../dto/create-offer.dto.js';
 import { UpdateOfferDto } from '../dto/update-offer.dto.js';
-
-// const DEFAULT_OFFER_COUNT = 60;
-// const DEFAULT_PREMIUM_COUNT = 3;
 
 enum DefaultCount {
   Offer = 60,
@@ -20,7 +17,7 @@ enum DefaultCount {
 @injectable()
 export class DefaultOfferService implements OfferServiceInterface {
   constructor(
-    @inject(Component.Logger) private readonly logger: Logger,
+    @inject(Component.Logger) private readonly logger: LoggerInterface,
     @inject(Component.OfferModel)
     private readonly offerModel: types.ModelType<OfferEntity>
   ) {}
@@ -33,19 +30,19 @@ export class DefaultOfferService implements OfferServiceInterface {
   }
 
   public async findById(
-    offerId: string
+    offerId: number
   ): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel.findById(offerId).populate(['userId']).exec();
   }
 
   public async deleteById(
-    offerId: string
+    offerId: number
   ): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel.findByIdAndDelete(offerId).exec();
   }
 
   public async updateById(
-    offerId: string,
+    offerId: number,
     dto: UpdateOfferDto
   ): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
@@ -95,7 +92,7 @@ export class DefaultOfferService implements OfferServiceInterface {
       .exec();
   }
 
-  public toggleIsFavorite(offerId: string) {
+  public toggleIsFavorite(_userId: string, offerId: string) {
     return this.offerModel.findOne(
       { offerId },
       (err: Error, offer: DocumentType<OfferEntity>) => {
@@ -125,6 +122,6 @@ export class DefaultOfferService implements OfferServiceInterface {
       .exec();
     const entity = offer?.toObject();
     entity?.setRating();
-    return entity?.rating;
+    return entity?.rating || null;
   }
 }

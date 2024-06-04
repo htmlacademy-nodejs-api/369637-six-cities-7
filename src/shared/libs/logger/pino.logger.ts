@@ -4,10 +4,10 @@ import { resolve } from 'node:path';
 
 import { getCurrentModuleDirectoryPath } from '../../helpers/index.js';
 
-import { Logger } from './logger.interface.js';
+import { LoggerInterface } from './logger.interface.js';
 
 @injectable()
-export class PinoLogger implements Logger {
+export class PinoLogger implements LoggerInterface {
   private readonly logger: PinoInstance;
 
   constructor() {
