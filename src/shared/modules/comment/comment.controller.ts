@@ -12,6 +12,7 @@ import { OfferServiceInterface } from '../offer/offer-service.interface.js';
 import { HttpError } from '../../libs/errors/http-error.js';
 import { fillDTO } from '../../helpers/common.js';
 import { CommentRdo } from '../rdo/comment.rdo.js';
+import { ValidateDtoMiddleware } from '../../libs/middleware/validate-dto.middleware.js';
 
 @injectable()
 export class CommentController extends BaseController {
@@ -35,6 +36,7 @@ export class CommentController extends BaseController {
       path: '/',
       method: HttpMethod.Post,
       handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateCommentDto)],
     });
   }
 

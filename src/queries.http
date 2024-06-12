@@ -117,3 +117,56 @@ Content-Type: application/json
 ###
 
 GET http://localhost:5000/offers/664a1746d2eeb04cdd866448/comments HTTP/1.1
+
+###
+
+POST http://localhost:5000/offers
+Content-Type: application/json
+
+{
+  "name": "M",
+    "description": "test description",
+    "date": "2024-04-23T15:28:07.118Z",
+    "city": "Brussels",
+    "preview": "https://housinganywhere.com/room/ut1254027/be/Grimbergen/lakensestraat",
+    "photos": [
+        "https://housinganywhere.com/room/ut1508147/be/Ixelles/rue-l-on-cuissez"
+
+    ],
+    "isPremium": true,
+    "isFavorite": true,
+    "rating": 10,
+    "type": "room",
+    "roomsCount": 1,
+    "guestsCount": 5,
+    "price": 57660,
+    "facilities": [
+        "Baby seat","TV","Air conditioning"
+    ],
+    "userId": "664a1688a632baf2fa0ac9c8",
+    "latitude": 4.895168,
+    "longitude": 4.895168
+}
+
+###
+
+POST http://localhost:5000/users/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "email": "toransoverlook.net",
+  "avatar": "torrance.png",
+  "firstName": "J",
+  "lastName": "T"
+}
+
+###
+
+POST http://localhost:5000/comments HTTP/1.1
+Content-Type: application/json
+
+{
+  "offerId": "664a1746d2eeb04cdd866",
+  "text": "F",
+  "userId": "664a1688a632baf2fa0ac9c8"
+}

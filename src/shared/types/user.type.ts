@@ -1,4 +1,7 @@
-export type UserType = 'обычный' | 'pro';
+export enum UserType {
+  ordinary = 'обычный',
+  pro = 'pro',
+}
 
 export type User = {
   /**
