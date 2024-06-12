@@ -6,14 +6,14 @@ import { UpdateOfferDto } from '../dto/update-offer.dto.js';
 
 export interface OfferServiceInterface {
   create(dto: CreateOfferDto): Promise<DocumentType<OfferEntity>>;
-  findById(offerId: number): Promise<DocumentType<OfferEntity> | null>;
+  findById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   updateById(
-    offerId: number,
+    offerId: string,
     dto: UpdateOfferDto
   ): Promise<DocumentType<OfferEntity> | null>;
-  deleteById(offerId: number): Promise<DocumentType<OfferEntity> | null>;
+  deleteById(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   find(): Promise<DocumentType<OfferEntity>[]>;
-  findFavorites(): Promise<DocumentType<OfferEntity>[]>;
+  findFavorites(userId: string): Promise<DocumentType<OfferEntity>[]>;
   toggleIsFavorite(
     userId: string,
     offerId: string
@@ -21,4 +21,5 @@ export interface OfferServiceInterface {
   findPremium(city: string): Promise<DocumentType<OfferEntity>[]>;
   incCommentCount(offerId: string): Promise<DocumentType<OfferEntity> | null>;
   countRatingById(offerId: string): Promise<number | null>;
+  exists(offerId: string): Promise<boolean>;
 }

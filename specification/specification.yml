@@ -220,7 +220,7 @@ paths:
       "500":
         description: Сервер недоступен
 
-    put:
+    patch:
       tags:
        - offers
       summary: Редактирование предложения
