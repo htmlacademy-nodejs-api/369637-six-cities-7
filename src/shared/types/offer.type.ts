@@ -1,23 +1,30 @@
 import type { User } from './user.type.js';
 
-export type City =
-  | 'Paris'
-  | 'Cologne'
-  | 'Brussels'
-  | 'Amsterdam'
-  | 'Hamburg'
-  | 'Dusseldorf';
+export enum City {
+  Paris = 'Paris',
+  Cologne = 'Cologne',
+  Brussels = 'Brussels',
+  Amsterdam = 'Amsterdam',
+  Hamburg = 'Hamburg',
+  Dusseldorf = 'Dusseldorf',
+}
 
-export type OfferType = 'apartment' | 'house' | 'room' | 'hotel';
+export enum OfferType {
+  apartment = 'apartment',
+  house = 'house',
+  room = 'room',
+  hotel = 'hotel',
+}
 
-export type Facilitie =
-  | 'Breakfast'
-  | 'Air conditioning'
-  | 'Laptop friendly workspace'
-  | 'Baby seat'
-  | 'Washer'
-  | 'Towels'
-  | 'Fridge';
+export enum Facilitie {
+  Breakfast = 'Breakfast',
+  AirConditioning = 'Air conditioning',
+  LaptopFriendlyWorkspace = 'Laptop friendly workspace',
+  BabySeat = 'Baby seat',
+  Washer = 'Washer',
+  Towels = 'Towels',
+  Fridge = 'Fridge',
+}
 
 export type Offer = {
   /**

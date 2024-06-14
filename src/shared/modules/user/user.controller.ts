@@ -12,6 +12,9 @@ import { Config } from '../../libs/config/index.js';
 import { HttpError } from '../../libs/errors/http-error.js';
 import { fillDTO } from '../../helpers/common.js';
 import { UserRdo } from '../rdo/user.rdo.js';
+import { CreateUserDto } from '../dto/create-user.dto.js';
+import { ValidateDtoMiddleware } from '../../libs/middleware/validate-dto.middleware.js';
+import { LoginUserDto } from '../dto/login-user.dto.js';
 
 @injectable()
 export class UserController extends BaseController {
@@ -29,11 +32,13 @@ export class UserController extends BaseController {
       path: '/register',
       method: HttpMethod.Post,
       handler: this.create,
+      middlewares: [new ValidateDtoMiddleware(CreateUserDto)],
     });
     this.addRoute({
       path: '/login',
       method: HttpMethod.Post,
       handler: this.login,
+      middlewares: [new ValidateDtoMiddleware(LoginUserDto)],
     });
     this.addRoute({
       path: '/login',

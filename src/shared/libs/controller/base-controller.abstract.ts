@@ -22,7 +22,13 @@ export abstract class BaseController implements ControllerInterface {
 
   public addRoute(route: RouteInterface): void {
     const wrapper = asyncHandler(route.handler.bind(this));
-    this._router[route.method](route.path, wrapper);
+    const middlewareHandlers = route.middlewares?.map((item) =>
+      asyncHandler(item.execute.bind(item))
+    );
+    const allHandlers = middlewareHandlers
+      ? [...middlewareHandlers, wrapper]
+      : wrapper;
+    this._router[route.method](route.path, allHandlers);
     this.logger.info(
       `Route registered: ${route.method.toUpperCase()} ${route.path}`
     );

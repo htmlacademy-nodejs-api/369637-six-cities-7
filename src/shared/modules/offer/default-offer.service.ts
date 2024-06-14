@@ -30,19 +30,19 @@ export class DefaultOfferService implements OfferServiceInterface {
   }
 
   public async findById(
-    offerId: number
+    offerId: string
   ): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel.findById(offerId).populate(['userId']).exec();
   }
 
   public async deleteById(
-    offerId: number
+    offerId: string
   ): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel.findByIdAndDelete(offerId).exec();
   }
 
   public async updateById(
-    offerId: number,
+    offerId: string,
     dto: UpdateOfferDto
   ): Promise<DocumentType<OfferEntity> | null> {
     return this.offerModel
@@ -85,28 +85,40 @@ export class DefaultOfferService implements OfferServiceInterface {
       .exec();
   }
 
-  public findFavorites(): Promise<DocumentType<OfferEntity>[]> {
+  public async findFavorites(
+    userId: string
+  ): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
-      .find({ isFavorite: true })
+      .find({ isFavorite: true, userId: userId })
       .populate(['userId'])
       .exec();
   }
 
-  public toggleIsFavorite(_userId: string, offerId: string) {
-    return this.offerModel.findOne(
-      { offerId },
-      (err: Error, offer: DocumentType<OfferEntity>) => {
-        if (err) {
-          this.logger.error('Error: ', err);
-        }
+  public async toggleIsFavorite(_userId: string, offerId: string) {
+    try {
+      const offer = await this.offerModel
+        .findById(offerId)
+        .populate(['userId'])
+        .exec();
+      if (offer) {
         offer.isFavorite = !offer.isFavorite;
-        // offer.save(function(err, updatedOffer) {
-        // });
+        return offer.save();
+      } else {
+        throw new Error('Offer not found');
       }
-    );
+    } catch (error) {
+      console.error(error);
+      throw error;
+    }
   }
 
-  public findPremium(cityName: string): Promise<DocumentType<OfferEntity>[]> {
+  public async exists(documentId: string): Promise<boolean> {
+    return (await this.offerModel.exists({ _id: documentId })) !== null;
+  }
+
+  public async findPremium(
+    cityName: string
+  ): Promise<DocumentType<OfferEntity>[]> {
     return this.offerModel
       .find({ isPremium: true, city: cityName })
       .sort({ date: SortType.Dec })
