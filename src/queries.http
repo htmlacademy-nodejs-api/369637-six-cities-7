@@ -170,3 +170,16 @@ Content-Type: application/json
   "text": "F",
   "userId": "664a1688a632baf2fa0ac9c8"
 }
+
+###
+
+POST http://localhost:5000/users/664a1688a632baf2fa0ac9c8/avatar HTTP/1.1
+
+Content-Type: multipart/form-data; boundary=----WebKitFormBoundary7MA4YWxkTrZu0gW
+
+------WebKitFormBoundary7MA4YWxkTrZu0gW
+Content-Disposition: form-data; name="avatar"; filename="looking.jpeg"
+Content-Type: image/png
+
+< /Documents/funny_pictures/looking.jpeg
+------WebKitFormBoundary7MA4YWxkTrZu0gW--
